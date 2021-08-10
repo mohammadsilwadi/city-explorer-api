@@ -25,14 +25,22 @@ app.get('/weather', (req, res) => {
 
         if(findCity!==undefined){
            
-            let retObject= {
-                city: findCity.city_name,
-                lon:findCity.lon,
-                lat:findCity.lat
-            }
-            res.status(200).send(retObject);
+            let cityWeather = [];
+
+            findCity.data.map((city) => {
+              cityWeather.push(
+                new Forecast(
+                  city.weather.description,
+                  city.datetime,
+                  city.app_min_temp,
+                  city.app_max_temp,
+                )
+              );
+            });
+            res.status(200).send(cityWeather);
         }else if(findCity===undefined){
-            res.send(`cant found ${city} use (Amman,Paris,Seattle)` );
+           
+            res.status(500).send(`cant found ${city} use (Amman,Paris,Seattle)` );
         }
     }catch{
         let err = {
@@ -41,12 +49,12 @@ app.get('/weather', (req, res) => {
             res.status(404).send(err)
     }
 })
-class forcast {
-    constructor(object) {
-        this.date=object.valid_date;
-        this.description=object.weather.description;
+class Forecast {
+    constructor( description,date,minTemp,maxTemp) {
+      this.description = `Low of ${minTemp}, high of ${maxTemp} with ${description}`;
+      this.date = date;
     }
-}
+  }
 
 app.listen(PORT, () => {
     console.log(`listening on port ${PORT}`);
