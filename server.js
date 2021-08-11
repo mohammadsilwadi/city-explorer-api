@@ -18,7 +18,8 @@ app.get('/weather', (req, res) => {
     try{
         
         let findCity = weatherData.find((element)=>{
-            if (element.city_name === city){
+            if (element.city_name.toLowerCase() === city.toLowerCase() &&
+            element.lat === Number(lat) && element.lon === Number(lon) ){
                 return element;
             }
         })    
