@@ -1,62 +1,17 @@
-const express = require('express');
-const app = express();
-const cors = require('cors');
-const weatherData = require('./data/weather.json')
-app.use(cors());
-require('dotenv').config();
+
+"use strict";
+const express = require("express");
+const app = express(); 
+const cors = require("cors"); 
+require("dotenv").config();
 const PORT = process.env.PORT;
-const axios = require('axios');
-app.get ('/',(req,res)=>{
-    res.send('backend');
-})
-//localhost:8000/weather?searchQuery=Amman
-app.get('/weather', (req, res) => {
-   
-    let city = req.query.searchQuery;
-    let lat = req.query.lat;
-    let lon = req.query.lon;
-    try{
-        
-        let findCity = weatherData.find((element)=>{
-            if (element.city_name.toLowerCase() === city.toLowerCase() &&
-            element.lat === Number(lat) && element.lon === Number(lon) ){
-                return element;
-            }
-        })    
-
-        if(findCity!==undefined){
-           
-            let cityWeather = [];
-
-            findCity.data.map((city) => {
-              cityWeather.push(
-                new Forecast(
-                  city.weather.description,
-                  city.datetime,
-                  city.app_min_temp,
-                  city.app_max_temp,
-                )
-              );
-            });
-            res.status(200).send(cityWeather);
-        }else if(findCity===undefined){
-           
-            res.status(500).send(`cant found ${city} use (Amman,Paris,Seattle)` );
-        }
-    }catch{
-        let err = {
-            error:`cant found ${city} use (Amman,Paris,Seattle)`
-        }
-            res.status(404).send(err)
-    }
-})
-class Forecast {
-    constructor( description,date,minTemp,maxTemp) {
-      this.description = `Low of ${minTemp}, high of ${maxTemp} with ${description}`;
-      this.date = date;
-    }
-  }
-
+const weather = require("./data/weather.json");
+const weatherController=require("./controllers/Wearther.controller")
+app.use(cors());
+app.get("/", (req, res) => {
+    res.send("Hello World");
+});
+app.get("/weather", weatherController)
 app.listen(PORT, () => {
-    console.log(`listening on port ${PORT}`);
-}); // kick start the express server to work
+    console.log(`I am a live at ${PORT}`);
+});
