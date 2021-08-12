@@ -1,8 +1,9 @@
 'use strict';
 class Forecast {
-    constructor(location) {
-        this.date = location.datetime;
-        this.description = location.weather.description;
-    }
+  constructor(description, date, minTemp, maxTemp) {
+    this.description = `Low of ${minTemp}, high of ${maxTemp} with ${description}`;
+    this.date = date;
+  }
 }
-module.exports=Forecast;
+
+module.exports = Forecast;
