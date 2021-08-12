@@ -26,12 +26,12 @@ Time Estimates
 
 For each of the lab features, make an estimate of the time it will take you to complete the feature, and record your start and finish times for that feature:
 
-Name of feature: ________________________________
+Name of feature: add cache 
 
-Estimate of time needed to complete: _____
+Estimate of time needed to complete: 3hr
 
-Start time: _____
+Start time: 2 
 
-Finish time: _____
+Finish time: 5
 
-Actual time needed to complete: _____
+Actual time needed to complete: 4 hr 
