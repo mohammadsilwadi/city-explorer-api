@@ -1,25 +1,30 @@
 'use strict';
-const Forecast=require('../models/Weather.modle');
-const weather = require("../data/weather.json");
+const axios = require('axios');
+const Forecast = require('../models/Weather.modle');
+require('dotenv').config();
+const WEATHER_API_KEY = process.env.WEATHER_API_KEY;
 
-const weatherController= (req, res) => {
-    let lon = Number(req.query['lon']);
-    let lat = Number(req.query['lat']);
-    let searchQuery = '';
-    if (req.query['q']) {
-        searchQuery = req.query['q'];
-    }
-    const searchResult = weather.find((item) => {
-        return (item.city_name.toLowerCase() === searchQuery.toLowerCase() ||
-            item.lat === lat ||
-            item.lon === lon)
-    })
-    console.log(typeof lon);
-    const cleanedData = []
-    searchResult.data.forEach(item => {
-        let cityData = new Forecast(item);
-        cleanedData.push(cityData);
-    })
-    res.send(cleanedData);
+//http://localhost:3005/weather?key=f6bf7b2e2cd542a5b53fa227f54b0bde&lon= 35.94503
+const weatherController = (req, res) => {
+  let lat = req.query.lat;
+  let lon = req.query.lon;
+  const weatherBitUrl = `https://api.weatherbit.io/v2.0/forecast/daily?key=${WEATHER_API_KEY}&lat=${lat}&lon=${lon}`;
+  axios.get(weatherBitUrl).then((Response) => {
+    console.log(Response)
+    let weatherData = Response.data.data.map((element) => {
+      return new Forecast(element.weather.description,
+        element.datetime,
+        element.app_min_temp,
+        element.app_max_temp);
+    });
+    res.json(weatherData);
+
+  })
+    .catch((error) => {
+      res.send(error.message);
+    });
+
+
 };
-module.exports=weatherController;
+
+module.exports = weatherController;
