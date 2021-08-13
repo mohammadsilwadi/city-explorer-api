@@ -3,7 +3,7 @@
 class Cache {
 constructor(savedData){
 this.savedData=savedData;
-this.timeStand=Date.now()
+this.timeStamp=Date.now()
 }
 
 }
